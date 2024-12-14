@@ -3,6 +3,8 @@ const app = express();
 
 const connectDB = require("./db/connection");
 const task = require("./router/taskRoute");
+const notFound=require("./middleware/notFound");
+const errorHandlerMiddleware=require("./middleware/error-handler")
 
 require('dotenv').config()
 
@@ -12,11 +14,15 @@ app.use(express.json());
 
 //route
 
-app.get("/hello", (req, res) => {
-  res.send("Task Manager is working");
-});
+// app.get("/hello", (req, res) => {
+//   res.send("Task Manager is working");
+// });
 
 app.use("/api/v1/tasks", task);
+
+app.use(notFound);
+
+app.use(errorHandlerMiddleware);
 
 const port = 3000;
 
