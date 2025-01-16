@@ -1,22 +1,16 @@
-const { use } = require("express/lib/router");
 const User = require("../models/User");
 const { StatusCodes } = require("http-status-codes");
-
-const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 
 const regester = async (req, res) => {
-  try {
-    const { name, email, password } = req.body;
+    try {
+        const user = await User.create({ ...req.body });
+        const token = user.createJWT();
+        res.status(StatusCodes.CREATED).json({ user:user.name, token});
+    } catch (error) {
+        console.log(error);
+    }
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const tempUser = { name, email, password: hashedPassword };
-
-    const user = await User.create({ ...tempUser });
-    res.status(StatusCodes.CREATED).json(user);
-  } catch (error) {
-    console.log(error);
-  }
 };
 const login = async (req, res) => {
   res.send("login route");
