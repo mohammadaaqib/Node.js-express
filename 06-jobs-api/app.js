@@ -22,6 +22,7 @@ app.use(express.json());
 
 // routes
 app.use('/api/v1/auth', authRouter);
+//appling auth middle on all jobs routes
 app.use('/api/v1/jobs', authentication,jobsRouter);
 
 app.use(notFoundMiddleware);
